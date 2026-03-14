@@ -4,6 +4,7 @@
 Multiple Comment (Docstring)
 """
 
+
 ##################################################
 #### print #######################################
 # string
@@ -31,7 +32,7 @@ print("Merhaba", "Python", "Öğreniyorum", sep=" * ")
 # end parametresi, print() fonksiyonu her çağrıldığında varsayılan olarak yeni bir satıra geçmeyi engeller ve
 # bunun yerine belirtilen değeri kullanır.
 # end parameter: Yeni bir satıra geçmesini engellesin
-print("Merhaba", "Python", "Öğreniyorum"," *** ","Dünya'ya hoşgeldin") # failed: non best practice
+print("Merhaba", "Python", "Öğreniyorum"," *** ","Dünya'ya hoşgeldin") # noticed: non best practice
 print("Merhaba", "Python", "Öğreniyorum ", end=" *** ")
 print("Dünya'ya hoşgeldin")
 
