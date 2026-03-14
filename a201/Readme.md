@@ -7,6 +7,7 @@ AI bir teknoloji değildir, üst şemsiye yapısıdır.
 - Bulanık mantık
 
 
+
 ---------------------------------------------------------------------------------
 ML: Machine Learning => Bütün kuralları tek tek yazmak yeriden veriden örüntü öğrenmesi sağlayan yaklaşımdır.
 Klasik öğrenme: Kurallar+Veri = Sonuç
