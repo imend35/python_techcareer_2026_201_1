@@ -1,0 +1,4 @@
+2026-01-03 17:11:00,839 root INFO: 59= __init__, Araba s\u0131n\u0131f\u0131na yeni bir araba olu\u015fturuldu. Marka: Bilinmiyor Model: Bilinmiyor Y\u0131l: 1970-01-01 renk:Bilinmiyor Fiyat=0.0 Motor Gücü=0.0 Yak\u0131t türüYakitTuru.BILINMIYOR, 
+2026-01-03 17:11:00,839 root INFO: 68= goster_bilgileri, Araba bilgilerie gösteriliyor. Marka: Bilinmiyor Model: Bilinmiyor, 
+2026-01-03 17:11:00,839 root INFO: 69= goster_bilgileri, Araba bilgilerie gösteriliyor. Marka: Bilinmiyor Model: Bilinmiyor Y\u0131l: 1970-01-01 renk:Bilinmiyor Fiyat=0.00 TL, Motor Gücü=0.0 HP, Yak\u0131t türüBilinmiyor, 
+2026-01-03 17:11:00,843 root INFO: 63= __del__, Araba silindi. Marka: Bilinmiyor Model: Bilinmiyor  , 
