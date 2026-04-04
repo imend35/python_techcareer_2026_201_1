@@ -32,3 +32,4 @@ except ImportError:
     def beartype(func):
         return func
 
+# 2-) CSV Dosyasını okusun /data/sample_sales.csv
