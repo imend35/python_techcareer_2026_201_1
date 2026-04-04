@@ -22,4 +22,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # beartype: decorator yazalım.
+"""
+Eğer beartype kurulu ise gerçek decorator kullansın
+Eğer beartype kurulu değilse sistemi bozmasın pasif bir yani yedek(pasif) bir decorator devreye girsin
+"""
+try:
+    from beartype import beartype
+except ImportError:
+    def beartype(func):
+        return func
 
