@@ -1,9 +1,10 @@
 1-) a101 içinkdeki her hafta 1 tane olacak şekilde çözüyoruz. (python_intermedia_examples)
-
 2-) AI,ML,DL sıklıkla kullanılan terimler
-
 3-) AI,ML,DL nedir ? aralarındaki farklar nelerdir ?
-
 4-) AI,ML,DL güçlü ve zayıf yanları nelerdir ?
-
 5-) Python için: verdiğim a301 klasörü içindeki kodlara kendiniz yazarak çalışorsunuz. Örnekler mutlaka yapıalcak
+
+
+6-) from __future__ import annotations bu nedir ?
+7-) base64 Nedir ?
+8-) aes des rsa algorithm Nedir ?
