@@ -34,7 +34,7 @@ except ImportError:
 
 # 2-) CSV Dosyasını okusun /data/sample_sales.csv
 @beartype
-def load_sales_data(csv_path: str|Path)-> pd.DataFrame:
+def load_sales_data(csv_path: str|Path) -> pd.DataFrame:
     path = Path(csv_path)
     if not path.exists():
         raise FileNotFoundError(f"CSV dosyasını bulamadı: {path}")
