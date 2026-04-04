@@ -33,3 +33,17 @@ except ImportError:
         return func
 
 # 2-) CSV Dosyasını okusun /data/sample_sales.csv
+@beartype
+def load_sales_data(csv_path: str|Path)-> pd.DataFrame:
+    path = Path(csv_path)
+    if not path.exists():
+        raise FileNotFoundError(f"CSV dosyasını bulamadı: {path}")
+
+    dataframe= pd.read_csv(path)
+    # Eğer dosya boşsa
+    if dataframe.empty:
+        raise ValueError("CSV dosyası boş geldi, Lütfen bu dosyaya veri ekleyiniz")
+    return dataframe
+
+
+#
