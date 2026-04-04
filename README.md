@@ -15,6 +15,10 @@ git clone https://github.com/hamitmizrak/python_techcareer_2026_201_1.git
 ```sh 
 chmod +x generate_requirements.sh
 ./generate_requirements.sh
+
+quantity,revenue,unit_price
+miktar  ,gelir  ,birim fiyat
+
 ```
 ---
 

@@ -8,3 +8,6 @@
 6-) from __future__ import annotations bu nedir ?
 7-) base64 Nedir ?
 8-) aes des rsa algorithm Nedir ?
+9-) df["date"] = pd.to_datetime(df["date"], errors="coerce")
+10- bit, byte aralarında farklar nelerdir ?
+11-) Binary, Decimal, Octal, Hexadecimal
