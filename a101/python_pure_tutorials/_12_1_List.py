@@ -16,6 +16,7 @@ print(list_data.count(0))
 print("~~~ ilk Data  ~~~")
 # İlk Data (Pozitif indeksleme: Sıfırdan başlar)
 print(f"{list_data[0]}")
+print(f"ilk eleman ==> {list_data[-5]}")
 
 ##### Son Data ########################################################################
 # Son Data
