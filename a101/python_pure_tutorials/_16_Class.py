@@ -19,7 +19,7 @@ araba_ornegi1.calistir()
 
 
 ##############################################################################################
-# Field'siz
+# Field'li
 araba_ornegi2 = Araba()
 araba_ornegi2.renk ="Beyaz"
 araba_ornegi2.yil ="2026"

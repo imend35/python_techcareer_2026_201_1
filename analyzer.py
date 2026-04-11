@@ -155,5 +155,200 @@ def prepate_sales_data(dataframe:pd.DataFrame) -> pd.DataFrame:
     return df.sort_values("date").reset_index(drop=True)
 
 
+# 4-) Bu fonksiyonun amacı:
+# Veriyi günlük bazda özetlemek.
+# Her gün için toplam gelir, toplam adet ve sipariş sayısı üretir.
+# sample_sales.csv => date,category,product,quantity,unit_price
+@beartype
+def summarize_by_day(dataframe: pd.DataFrame) -> pd.DataFrame:
+    # Orijinal veriyi bozmamak için kopyasını alıyoruz.
+    working_df = dataframe.copy()
+
+    # Datetime içindeki sadece tarih parçasını alıyoruz.
+    working_df["report_date"] = working_df["date"].dt.date
+
+    # Günlük groupby yapıyoruz.
+    # total_revenue: revenue toplamı
+    # total_quantity: quantity toplamı
+    # order_count: ürün satır sayısı
+    daily_summary = (
+        working_df.groupby("report_date", as_index=False)
+        .agg(
+            total_revenue=("revenue", "sum"),
+            total_quantity=("quantity", "sum"),
+            order_count=("product", "count"),
+        )
+        .sort_values("report_date")
+        .reset_index(drop=True)
+        .rename(columns={"report_date": "date"})
+    )
+
+    return daily_summary
+
+
+# 5-) Bu fonksiyonun amacı:
+# Veriyi kategori bazlı özetlemek.
+# Her kategori için gelir, adet, sipariş sayısı ve ortalama performans puanı çıkarır.
+# sample_sales.csv => date,category,product,quantity,unit_price
+@beartype
+def summarize_by_category(dataframe: pd.DataFrame) -> pd.DataFrame:
+    # category kolonuna göre gruplayıp özet hesaplıyoruz.
+    category_summary = (
+        dataframe.groupby("category", as_index=False)
+        .agg(
+            total_revenue=("revenue", "sum"),
+            total_quantity=("quantity", "sum"),
+            order_count=("product", "count"),
+            average_score=("performance_score", "mean"),
+        )
+        .sort_values("total_revenue", ascending=False)
+        .reset_index(drop=True)
+    )
+
+    # Ortalama puanı daha okunabilir olsun diye 2 basamağa yuvarlıyoruz.
+    category_summary["average_score"] = category_summary["average_score"].round(2)
+
+    return category_summary
+
+
+# 6-) Bu fonksiyonun amacı:
+# Dashboard veya HTML raporda göstereceğimiz KPI metriklerini tek yerde toplamak.
+@beartype
+def calculate_metrics(dataframe: pd.DataFrame) -> dict[str, Any]:
+    # Günlük özet veriyi alıyoruz.
+    daily_summary = summarize_by_day(dataframe)
+
+    # Kategori özet veriyi alıyoruz.
+    category_summary = summarize_by_category(dataframe)
+
+    # Toplam geliri hesaplıyoruz.
+    total_revenue = float(dataframe["revenue"].sum())
+
+    # Toplam ürün adedini hesaplıyoruz.
+    total_quantity = int(dataframe["quantity"].sum())
+
+    # Toplam sipariş sayısını hesaplıyoruz.
+    total_orders = int(len(dataframe))
+
+    # Ortalama sipariş tutarı hesaplıyoruz.
+    average_order_value = float(total_revenue / total_orders) if total_orders else 0.0
+
+    # Trend hesabı:
+    # x ekseni 0,1,2,3... gibi günlük index dizisi olur.
+    x_axis = np.arange(len(daily_summary))
+
+    # polyfit ile günlük gelir trend eğimini hesaplıyoruz.
+    # Eğer 1'den fazla gün yoksa eğim 0 kabul edilir.
+    slope = float(np.polyfit(x_axis, daily_summary["total_revenue"], 1)[0]) if len(daily_summary) > 1 else 0.0
+
+    # Eğim değerine göre yorum metni oluşturuyoruz.
+    if slope > 5:
+        trend_message = "Gelir trendi yükseliş yönünde."
+    elif slope < -5:
+        trend_message = "Gelir trendi düşüş yönünde."
+    else:
+        trend_message = "Gelir trendi dengeli görünüyor."
+
+    # En iyi kategoriyi, kategori özet tablosunun ilk satırından alıyoruz.
+    best_category = str(category_summary.iloc[0]["category"]) if not category_summary.empty else "-"
+
+    # En güçlü günü, günlük gelir en yüksek olan tarihten alıyoruz.
+    best_day = str(daily_summary.sort_values("total_revenue", ascending=False).iloc[0]["date"]) if not daily_summary.empty else "-"
+
+    # Tüm KPI sonuçlarını tek sözlük halinde döndürüyoruz.
+    return {
+        "total_revenue": round(total_revenue, 2),
+        "total_quantity": total_quantity,
+        "total_orders": total_orders,
+        "average_order_value": round(average_order_value, 2),
+        "best_category": best_category,
+        "best_day": best_day,
+        "trend_message": trend_message,
+    }
+
+
+
+# 7-) Bu fonksiyonun amacı:
+# Günlük toplam gelir grafiğini oluştursun ve PNG dosyasını oalrak diske kaydetsin.
+@beartype
+def create_daily_revenue_chart(daily_summary: pd.DataFrame,output_path: str|Path) -> Path:
+    # Çıktı yolunu PAth nesnesine çevirelim.
+    output= Path(output_path)
+
+    # Klasör yoksa otomatik olarak oluştursun
+    output.parent.mkdir(parents=True, exist_ok=True)
+
+    # Grafik boyutunu belirliyoruz
+    plt.figure(figsize=(10,4.5))
+
+    # Çizgi grafik oluşturalım
+    plt.plot(daily_summary["date"].astype(str), daily_summary["total_revenue"], marker="o")
+
+    # Başlık ve Eksen isimlerini ekliyoruz
+    plt.title("Günlük Toplam Gelir")
+    plt.xlabel("Tarih")
+    plt.ylabel("Gelir")
+
+    # Tarih etiketlerini döndürerek okunabilir hale getirmek
+    plt.xticks(rotation=45, ha="right")
+
+    # Görsel taşmaları önlemek
+    plt.tight_layout()
+
+    # Grafigi PNG olarak kaydediliyor
+    plt.savefig(output, dpi=120, bbox_inches="tight")
+
+    # Belleğimizi temizlemek için grafiği kapatıyoruz
+    plt.close()
+
+    return output
+
+
+
+# 8-) Bu fonksiyonun amacı:
+# Kategorilerine göre toplam gelir grafiğini oluştursun Çubuk grafik ve PNG dosyasını oalrak diske kaydetsin.
+@beartype
+def create_category_revenue_chart(category_summary: pd.DataFrame,output_path: str|Path) -> Path:
+    # Çıktı yolunu PAth nesnesine çevirelim.
+    output= Path(output_path)
+
+    # Klasör yoksa otomatik olarak oluştursun
+    output.parent.mkdir(parents=True, exist_ok=True)
+
+    # Grafik boyutunu belirliyoruz
+    plt.figure(figsize=(8,4.5))
+
+    # Çizgi grafik oluşturalım
+    plt.bar(category_summary["category"], category_summary["total_revenue"])
+
+    # Başlık ve Eksen isimlerini ekliyoruz
+    plt.title("Kategori Göre Toplam Gelir")
+    plt.xlabel("Kategori")
+    plt.ylabel("Gelir")
+
+    # X ekseni etiketlerini döndürerek okunabilir hale getirmek
+    plt.xticks(rotation=20, ha="right")
+
+    # Görsel taşmaları önlemek
+    plt.tight_layout()
+
+    # Grafigi PNG olarak kaydediliyor
+    plt.savefig(output, dpi=120, bbox_inches="tight")
+
+    # Belleğimizi temizlemek için grafiği kapatıyoruz
+    plt.close()
+
+    return output
+
+
+# 9-) Bu fonksiyonun amacı:
+# Pandas DataFrame'i HTML tablo string'e çevirmek
+# Böylece rapor içine doğrudan gömülü bir şekilde dönüştürmek
+@beartype
+def dataframe_to_html_table(dataframe: pd.DataFrame, max_rows:int = 10) ->str:
+    # Sadece ilk max_rows'a kadar satırı tabloya çeviriyoruz.
+    return dataframe.head(max_rows).to_html(index=False, classes="table",border=0)
+
+
 
 
