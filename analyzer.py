@@ -1,3 +1,4 @@
+# Bu annotations en yukarıda OLMALIIIIIIIIIIIIIIIIII
 # Bu import sayesinde Python tip ipuçlarını daha güvenli ve esnek bir şekilde kullanabiliyoruz.
 # Özellikle Python sürümlerinde tiplerin ileri referanslarını desteklemek için faydalıdır.
 from __future__ import annotations
