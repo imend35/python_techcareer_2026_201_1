@@ -271,7 +271,7 @@ def calculate_metrics(dataframe: pd.DataFrame) -> dict[str, Any]:
 # 7-) Bu fonksiyonun amacı:
 # Günlük toplam gelir grafiğini oluştursun ve PNG dosyasını oalrak diske kaydetsin.
 @beartype
-def create_daily_revenue_chart(daily_summary: pd.DataFrame,output_path: str|Path) -> Path:
+def create_daily_revenue_chart(daily_summary: pd.DataFrame, output_path: str|Path) -> Path:
     # Çıktı yolunu PAth nesnesine çevirelim.
     output= Path(output_path)
 
@@ -375,4 +375,206 @@ def build_html_report(
         category_chart_path: str | Path,
         output_html_path:str | Path,
 ) ->Path:
+    # HTML dosyasının yazılacağı yolu Path nesnesine çeviriyoruz.
+    output_path = Path(output_html_path)
 
+    # Gerekirse klasörü oluşturuyoruz.
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    # Günlük gelir grafiğini base64 string haline getiriyoruz.
+    daily_chart_base64 = image_to_base64(daily_chart_path)
+
+    # Kategori gelir grafiğini base64 string haline getiriyoruz.
+    category_chart_base64 = image_to_base64(category_chart_path)
+
+    # Kategori özet tablosunu HTML tabloya çeviriyoruz.
+    category_table_html = dataframe_to_html_table(category_summary, max_rows=10)
+
+    # Günlük özet tablosunu HTML tabloya çeviriyoruz.
+    daily_table_html = dataframe_to_html_table(daily_summary, max_rows=10)
+
+    # Ham veri önizlemesini HTML tabloya çeviriyoruz.
+    preview_html = dataframe_to_html_table(preview_data, max_rows=12)
+
+    # Tüm rapor içeriğini tek HTML string olarak oluşturuyoruz.
+    html_content = f"""
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tek Sayfalık Satış Analiz Raporu</title>
+    <style>
+        body {{
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            margin: 0;
+            padding: 0;
+            color: #1f2937;
+        }}
+        .container {{
+            width: min(1200px, 92%);
+            margin: 30px auto;
+        }}
+        .header {{
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+            margin-bottom: 20px;
+        }}
+        .header h1 {{
+            margin: 0 0 10px 0;
+        }}
+        .header p {{
+            margin: 0;
+            line-height: 1.6;
+        }}
+        .grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }}
+        .card {{
+            background: white;
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+        }}
+        .card h3 {{
+            margin-top: 0;
+            font-size: 15px;
+            color: #4b5563;
+        }}
+        .metric {{
+            font-size: 28px;
+            font-weight: bold;
+            margin: 8px 0;
+        }}
+        .section {{
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }}
+        .section h2 {{
+            margin-top: 0;
+        }}
+        .chart-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 16px;
+        }}
+        .chart-box img {{
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }}
+        .table {{
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 14px;
+            overflow: hidden;
+        }}
+        .table th, .table td {{
+            border: 1px solid #e5e7eb;
+            padding: 10px;
+            text-align: left;
+        }}
+        .table th {{
+            background: #eef2ff;
+        }}
+        .footer-note {{
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 8px;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Tek Sayfalık Satış Analiz Raporu</h1>
+            <p>
+                Bu rapor; <strong>pandas</strong> ile veri işleme,
+                <strong>numpy</strong> ile sayısal hesaplama,
+                <strong>matplotlib</strong> ile grafik üretimi ve
+                <strong>beartype</strong> ile tip kontrollü fonksiyon yapısını göstermek için hazırlanmıştır.
+            </p>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h3>Toplam Gelir</h3>
+                <div class="metric">{metrics['total_revenue']}</div>
+            </div>
+            <div class="card">
+                <h3>Toplam Ürün Adedi</h3>
+                <div class="metric">{metrics['total_quantity']}</div>
+            </div>
+            <div class="card">
+                <h3>Toplam Sipariş</h3>
+                <div class="metric">{metrics['total_orders']}</div>
+            </div>
+            <div class="card">
+                <h3>Ortalama Sipariş Tutarı</h3>
+                <div class="metric">{metrics['average_order_value']}</div>
+            </div>
+            <div class="card">
+                <h3>En İyi Kategori</h3>
+                <div class="metric">{metrics['best_category']}</div>
+            </div>
+            <div class="card">
+                <h3>En Güçlü Gün</h3>
+                <div class="metric">{metrics['best_day']}</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Trend Yorumu</h2>
+            <p>{metrics['trend_message']}</p>
+            <p class="footer-note">Bu yorum, günlük gelir verisi üzerinden numpy ile hesaplanan eğim değerine göre oluşturulmuştur.</p>
+        </div>
+
+        <div class="section">
+            <h2>Grafikler</h2>
+            <div class="chart-grid">
+                <div class="chart-box">
+                    <h3>Günlük Gelir Grafiği</h3>
+                    <img src="data:image/png;base64,{daily_chart_base64}" alt="Günlük gelir grafiği" />
+                </div>
+                <div class="chart-box">
+                    <h3>Kategori Gelir Grafiği</h3>
+                    <img src="data:image/png;base64,{category_chart_base64}" alt="Kategori gelir grafiği" />
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Kategori Özeti</h2>
+            {category_table_html}
+        </div>
+
+        <div class="section">
+            <h2>Günlük Özet</h2>
+            {daily_table_html}
+        </div>
+
+        <div class="section">
+            <h2>Ham Veri Önizleme</h2>
+            {preview_html}
+            <p class="footer-note">Bu tablo, temizlenmiş veri setinin ilk 15 satırını göstermektedir.</p>
+        </div>
+    </div>
+</body>
+</html>
+"""
+
+    # Oluşturduğumuz HTML içeriğini dosyaya yazıyoruz.
+    output_path.write_text(html_content, encoding="utf-8")
+
+    # Sonuç olarak HTML dosya yolunu geri döndürüyoruz.
+    return output_path
