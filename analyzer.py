@@ -15,6 +15,7 @@ from jinja2.utils import missing
 # Özellikle Python sürümlerinde tiplerin ileri referanslarını desteklemek için faydalıdır.
 from __future__ import annotations
 
+
 # Path
 # Dosya ve klasör yollarını işletim sistemlerinden bağımsız bir şekilde yönetmek içindir.
 from pathlib import Path

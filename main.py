@@ -71,3 +71,5 @@ def main() -> None:
         print("report.html dosyasını manuel açınız ")
 
 
+
+
