@@ -21,7 +21,6 @@ from analyzer import (
     summarize_by_day,
 )
 
-
 # 2-) Ana Çalışma fonksiyonunu tanımlıyoruz.
 def main() -> None:
     project_root = Path(__file__).resolve().parent
@@ -47,7 +46,7 @@ def main() -> None:
         metrics=metrics,
         category_summary= category_summary,
         daily_summary=daily_summary,
-        preview_data=preview_data,
+        preview_data=clean_dataframe,
         daily_chart_path=daily_chart_path,
         category_chart_path=category_chart_path,
         output_html_path=output_dir / "report.html",
