@@ -1,18 +1,19 @@
+# Bu import sayesinde Python tip ipuçlarını daha güvenli ve esnek bir şekilde kullanabiliyoruz.
+# Özellikle Python sürümlerinde tiplerin ileri referanslarını desteklemek için faydalıdır.
+from __future__ import annotations
+
+
 """
 Bu dosya: projenin veri analizi ve rapor üretim mantığını taşır.
 Bizim amacımız: kodu parçalara bölmek ve her bir parçayı SOLID(Single Responsibility) göre yönetmek  ==> Yani Modüler olmasını sağlamak
 """
 
-# 1-) Gerekli kütüphaneleri içe aktarıyoruz.
 """
     Pandas     => Veri işleme
     Numpy      => Sayısal Hesaplama
     Matplotlib => Grafik üretimi
     Beartype   => Fonksiyonlara tip kontrolü için
 """
-# Bu import sayesinde Python tip ipuçlarını daha güvenli ve esnek bir şekilde kullanabiliyoruz.
-# Özellikle Python sürümlerinde tiplerin ileri referanslarını desteklemek için faydalıdır.
-from __future__ import annotations
 
 # Path:
 # Dosya ve klasör yollarını işletim sisteminden bağımsız şekilde yönetmek için kullanılır.

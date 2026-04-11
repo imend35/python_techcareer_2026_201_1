@@ -72,4 +72,6 @@ def main() -> None:
         print(f"Tarayıcı açılırken hata oluştu: {error}")
         print("report.html dosyasını manuel açabilirsin.")
 
-
+# 9-) main tetiklemesi
+if __name__ == "__main__":
+    main()
