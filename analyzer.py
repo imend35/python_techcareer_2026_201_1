@@ -350,5 +350,29 @@ def dataframe_to_html_table(dataframe: pd.DataFrame, max_rows:int = 10) ->str:
     return dataframe.head(max_rows).to_html(index=False, classes="table",border=0)
 
 
+# 10-) Bu fonksiyonun amacı:
+# PNG gibi görsel dosyasını base64 string haline çevirmek
+# Böylece HTML içinde ayrı dosya çağırmadan direk olarak gömübilsin
+@beartype
+def image_to_base64(image_path: str|Path) ->str:
+    # Dosyayı binary modda açıyoruz.
+    with open(image_path, "rb") as image_file:
+        # Dosyayı okuyup base64'e çeviriyoruz
+        encoded= base64.b64decode(image_file.read()).decode("utf-8")
 
+    return encoded
+
+# 11-) Bu fonksiyonun amacı:
+# Tek sayfalık HTML raporunu üretmek
+# Tablolar, yorumlar, grafik bu alanda göster ve birleştir
+@beartype
+def build_html_report(
+        metrics: dict[str,Any],
+        category_summary:pd.DataFrame,
+        daily_summary:pd.DataFrame,
+        preview_data:pd.DataFrame,
+        daily_chart_path: str | Path,
+        category_chart_path: str | Path,
+        output_html_path:str | Path,
+) ->Path:
 
