@@ -2,7 +2,6 @@
 Bu dosya: projenin veri analizi ve rapor üretim mantığını taşır.
 Bizim amacımız: kodu parçalara bölmek ve her bir parçayı SOLID(Single Responsibility) göre yönetmek  ==> Yani Modüler olmasını sağlamak
 """
-from jinja2.utils import missing
 
 # 1-) Gerekli kütüphaneleri içe aktarıyoruz.
 """
@@ -15,151 +14,142 @@ from jinja2.utils import missing
 # Özellikle Python sürümlerinde tiplerin ileri referanslarını desteklemek için faydalıdır.
 from __future__ import annotations
 
-
-# Path
-# Dosya ve klasör yollarını işletim sistemlerinden bağımsız bir şekilde yönetmek içindir.
+# Path:
+# Dosya ve klasör yollarını işletim sisteminden bağımsız şekilde yönetmek için kullanılır.
 from pathlib import Path
 
 # Any:
-# Dönüş tiplerinde veya karışık veri yapılarında esnek tip tanımı yapmak için kullanıyoruz
+# Dönüş tiplerinde veya karışık veri yapılarında esnek tip tanımı yapmak için kullanılır.
 from typing import Any
 
-#base64:
-#Grafik PNG dosyalarını HTML içine gömebilmek için base64 string'e çevirmede kullanılır
+# base64:
+# Grafik PNG dosyalarını HTML içine gömebilmek için base64 string'e çevirmede kullanılır.
 import base64
 
-# io: Veri akışını veya bellek içi byte işlem işlemlerini
+# io:
+# Şu an aktif kullanılmıyor ama veri akışı veya bellek içi byte işlemleri için eklenmiş olabilir.
 import io
 
-#numpy:
-# Sayısal hesaplamala, median, mea,std,polyfit etc
+# numpy:
+# Sayısal hesaplama, median, mean, std, polyfit gibi işlemler için kullanılır.
 import numpy as np
 
-# pandas
-# csv okuma, tablo işlemleri, dönüşüm, özet çıkarma
+# pandas:
+# CSV okuma, tablo işleme, groupby, dönüşüm, özet çıkarma için kullanılır.
 import pandas as pd
 
-# matplotlib
-# Grafik çizmek veya PNG üretmek
+# matplotlib:
+# Grafik çizmek ve PNG üretmek için kullanılır.
 import matplotlib.pyplot as plt
 
-# beartype: decorator yazalım.
-"""
-Eğer beartype kurulu ise gerçek decorator kullansın
-Eğer beartype kurulu değilse sistemi bozmasın pasif bir yani yedek(pasif) bir decorator devreye girsin
-"""
+# Burada amaç:
+# Eğer beartype kurulmuşsa gerçek decorator kullanılsın.
+# Kurulu değilse proje tamamen kırılmasın, sahte ama pasif bir decorator devreye girsin.
 try:
     from beartype import beartype
 except ImportError:
-    # Bu yedek yapı sayesinde beartype yoksa bu fonksiyon normal bir çalışmaya devam eder.
+    # Bu yedek yapı sayesinde beartype yoksa fonksiyon normal çalışmaya devam eder.
     def beartype(func):
         return func
 
-# 2-) CSV Dosyasını okusun /data/sample_sales.csv
-# Kullanıcının verdiği CSV dosyasını okumak ve DataFrame oalrak geri döndürmek
+
+# 2- Bu fonksiyonun amacı:
+# Kullanıcının verdiği CSV dosyasını okumak ve DataFrame olarak geri döndürmektir.
+# Ayrıca dosya yoksa veya boşsa anlamlı hata verir.
 @beartype
-def load_sales_data(csv_path: str|Path) -> pd.DataFrame:
-    # Gelen yolu Path nesnesine çeviriyoruz ki dosya sistemi işlemleri daha güvenli olsun
+def load_sales_data(csv_path: str | Path) -> pd.DataFrame:
+    # Gelen yolu Path nesnesine çeviriyoruz ki dosya sistemi işlemleri daha güvenli olsun.
     path = Path(csv_path)
 
-    # Eğer dosya fiziksel oalrak yoksa direk kata versin
+    # Eğer dosya fiziksel olarak yoksa direkt hata veriyoruz.
     if not path.exists():
-        raise FileNotFoundError(f"CSV dosyasını bulamadı: {path}")
+        raise FileNotFoundError(f"CSV dosyası bulunamadı: {path}")
 
-    # CSV dosyasını panda  DataFrame olarak okunsun
-    dataframe= pd.read_csv(path)
+    # CSV dosyasını pandas DataFrame olarak okuyoruz.
+    dataframe = pd.read_csv(path)
 
-    # Eğer dosya var ama içi boşsa uyarı verelim
+    # Eğer dosya var ama içi boşsa kullanıcıya anlamlı uyarı veriyoruz.
     if dataframe.empty:
-        raise ValueError("CSV dosyası boş geldi, Lütfen bu dosyaya veri ekleyiniz")
+        raise ValueError("CSV dosyası boş geldi. Lütfen veri kontrolü yapın.")
 
-    # Eğer başarılı ise veriyi geri dönder.
+    # Başarılıysa veriyi geri döndürüyoruz.
     return dataframe
 
 
-# 3-) Bu fonksiyon ham(raw) veriyi temizlenir(Cleaner) ve analiz için hazır hale getirecek
-# Tarih, sayısal, hesaplamalar vs
-# Ham veriyi (raw) analiz yapmak
-# Eksik kolon, tip dönüşü, bozuk satır, etiketleme
-"""
-Std: Standart deviation (Standart Sapma): Sayıların ortalaması 
-Veriler birbirine ne akdar yakın ? : Veriler ortalamaya ne kadar yakın duruyor, veya ne kadar uzağa saçılıyor Ortalama: 50
-Örnek: [48,49,50,51,52] => Bunlar birbirine yakın
-Örnek: [10,30,50,70,90] => Bunlar birbirine yakın değil
-Mean: Merkez nerede
-"""
+# 3- Bu fonksiyonun amacı:
+# Ham veriyi analiz için uygun hale getirmektir.
+# Eksik kolon kontrolü, tip dönüşümü, bozuk satır temizliği, revenue hesabı ve etiketleme burada yapılır.
 @beartype
-def prepate_sales_data(dataframe:pd.DataFrame) -> pd.DataFrame:
-    # Original veriyi bozmamak için kopyasını oluştururuz.
+def prepare_sales_data(dataframe: pd.DataFrame) -> pd.DataFrame:
+    # Orijinal veriyi bozmamak için kopyasını alıyoruz.
     df = dataframe.copy()
 
-    # Projede zorunluı olan kolonları tanımlıyoruz
-    required_columns ={"date","category","product","quantity","unit_price"}
+    # Projede zorunlu olan kolonları tanımlıyoruz.
+    required_columns = {"date", "category", "product", "quantity", "unit_price"}
 
-    # Eksik kolonlar var mı diye kontrol ediyoruz
-    missing_columns= required_columns.difference(df.columns)
+    # Eksik kolon var mı diye kontrol ediyoruz.
+    missing_columns = required_columns.difference(df.columns)
 
-    # Eğer eksik kolon varsa işlemi durduruyoruz
+    # Eğer eksik kolon varsa işlem durur.
     if missing_columns:
-        raise ValueError(f"Eksik kolonlar bulundu. {sorted(missing_columns)} ")
+        raise ValueError(f"Eksik kolonlar bulundu: {sorted(missing_columns)}")
 
-    # Cast -> Dönüşümler (Date, Numerics)
-    # Tarih  => datetime
-    # coerce => Date     NaT => Hatalı değer
-    # coerce => Sayısal  NaN => Hatalı değer
+    # Tarih alanını gerçek datetime tipine çeviriyoruz.
+    # Hatalı tarih varsa NaT olur.
     df["date"] = pd.to_datetime(df["date"], errors="coerce")
+
+    # quantity alanını sayısal hale çeviriyoruz.
+    # Hatalı değerler NaN olur.
     df["quantity"] = pd.to_numeric(df["quantity"], errors="coerce")
+
+    # unit_price alanını sayısal hale çeviriyoruz.
     df["unit_price"] = pd.to_numeric(df["unit_price"], errors="coerce")
 
-    # Bozuk satırları temizleyelim
-    df= df.dropna(subset=["date","category","product","quantity","unit_price"]).copy()
+    # Kritik alanlarda eksik veya bozuk satır varsa bunları temizliyoruz.
+    df = df.dropna(subset=["date", "category", "product", "quantity", "unit_price"]).copy()
 
-    # Sayısal değerlerde Sıfır(0) veya Eksi (-) varsa dahil etme
-    df= df[(df["quantity"]>0) & (df["unit_price"]>0)].copy()
+    # İş kuralı:
+    # quantity ve unit_price sıfır veya negatifse bu kayıtları rapora dahil etmiyoruz.
+    df = df[(df["quantity"] > 0) & (df["unit_price"] > 0)].copy()
 
-    # Toplam gelir hesabı
-    # revenue= quantity * unit_price
-    # gelir  = miktar   * birim fiyat
+    # Toplam gelir hesabı:
+    # revenue = quantity * unit_price
     df["revenue"] = df["quantity"] * df["unit_price"]
 
-    # numpy ile sipariş büyüklüğünü göstermek (Label)
-    # Sipariş büyklüğünü ayırmak için quantity median değerini kullanıyoruz.
-    quantity_median= float(np.median(df["quantity"]))
+    # Sipariş büyüklüğünü ayırmak için quantity median değerini buluyoruz.
+    quantity_median = float(np.median(df["quantity"]))
 
-    # quantity median'dan byüük/eşitse Büyük sipariş değilse Standart Sipariş etiketine
-    df["order_size_label"] =np.where(
+    # quantity median'dan büyük/eşitse Büyük Sipariş, değilse Standart Sipariş etiketi veriyoruz.
+    df["order_size_label"] = np.where(
         df["quantity"] >= quantity_median,
         "Büyük Sipariş",
-        "Standart Sipariş"
+        "Standart Sipariş",
     )
 
-    # Performans puanı oluşturuyoruz (Score)
-    # revenue: ortalamasını hesaplıyoruz.
+    # Revenue ortalamasını hesaplıyoruz.
     revenue_mean = float(np.mean(df["revenue"]))
 
-    # revenue: Standart sapmasını hesaplıyoruz.
-    revenue_std  = float(np.std(df["revenue"]))
+    # Revenue standart sapmasını hesaplıyoruz.
+    revenue_std = float(np.std(df["revenue"]))
 
-    # Eğer std 0 ise tüm satırlar aynı revenue sahiptir
-    # Böylece sabit performans puanını veriyoruz.
-    if revenue_std==0:
+    # Eğer std 0 ise tüm satırlar aynı revenue'ya sahip demektir.
+    # Bu durumda sabit performans puanı veriyoruz.
+    if revenue_std == 0:
         df["performance_score"] = 50.0
     else:
-        # Z-score ile her kaydın ortalamadan sapmasını hesaplıyoruz
-        z_scores = (df["revenue"]-revenue_mean)/revenue_std
+        # Z-score ile her kaydın ortalamadan sapmasını hesaplıyoruz.
+        z_scores = (df["revenue"] - revenue_mean) / revenue_std
 
-        # Skoru 0-100
-        # Z-score daha okuanbilir olması 0-100 benzeri bir skala taşıyoruz
-        df["performance_score"] = np.clip(50 + (z_scores*10), 0,100).round(2)
+        # Z-score'u daha okunabilir bir 0-100 benzeri skala içine taşıyoruz.
+        df["performance_score"] = np.clip(50 + (z_scores * 10), 0, 100).round(2)
 
-    # Veriyi tarihe göre sıralayıp index'i sıfırlıyoruz.
+    # Son olarak veriyi tarihe göre sıralayıp index'i sıfırlıyoruz.
     return df.sort_values("date").reset_index(drop=True)
 
 
-# 4-) Bu fonksiyonun amacı:
+# 4- Bu fonksiyonun amacı:
 # Veriyi günlük bazda özetlemek.
 # Her gün için toplam gelir, toplam adet ve sipariş sayısı üretir.
-# sample_sales.csv => date,category,product,quantity,unit_price
 @beartype
 def summarize_by_day(dataframe: pd.DataFrame) -> pd.DataFrame:
     # Orijinal veriyi bozmamak için kopyasını alıyoruz.
@@ -187,10 +177,9 @@ def summarize_by_day(dataframe: pd.DataFrame) -> pd.DataFrame:
     return daily_summary
 
 
-# 5-) Bu fonksiyonun amacı:
+# 5- Bu fonksiyonun amacı:
 # Veriyi kategori bazlı özetlemek.
 # Her kategori için gelir, adet, sipariş sayısı ve ortalama performans puanı çıkarır.
-# sample_sales.csv => date,category,product,quantity,unit_price
 @beartype
 def summarize_by_category(dataframe: pd.DataFrame) -> pd.DataFrame:
     # category kolonuna göre gruplayıp özet hesaplıyoruz.
@@ -212,7 +201,7 @@ def summarize_by_category(dataframe: pd.DataFrame) -> pd.DataFrame:
     return category_summary
 
 
-# 6-) Bu fonksiyonun amacı:
+# 6- Bu fonksiyonun amacı:
 # Dashboard veya HTML raporda göstereceğimiz KPI metriklerini tek yerde toplamak.
 @beartype
 def calculate_metrics(dataframe: pd.DataFrame) -> dict[str, Any]:
@@ -268,114 +257,113 @@ def calculate_metrics(dataframe: pd.DataFrame) -> dict[str, Any]:
     }
 
 
-
-# 7-) Bu fonksiyonun amacı:
-# Günlük toplam gelir grafiğini oluştursun ve PNG dosyasını oalrak diske kaydetsin.
+# 7- Bu fonksiyonun amacı:
+# Günlük toplam gelir grafiğini oluşturup PNG dosyası olarak diske kaydetmektir.
 @beartype
-def create_daily_revenue_chart(daily_summary: pd.DataFrame, output_path: str|Path) -> Path:
-    # Çıktı yolunu PAth nesnesine çevirelim.
-    output= Path(output_path)
+def create_daily_revenue_chart(daily_summary: pd.DataFrame, output_path: str | Path) -> Path:
+    # Çıktı yolunu Path nesnesine çeviriyoruz.
+    output = Path(output_path)
 
-    # Klasör yoksa otomatik olarak oluştursun
+    # Klasör yoksa otomatik oluşturuyoruz.
     output.parent.mkdir(parents=True, exist_ok=True)
 
-    # Grafik boyutunu belirliyoruz
-    plt.figure(figsize=(10,4.5))
+    # Grafik boyutunu belirliyoruz.
+    plt.figure(figsize=(10, 4.5))
 
-    # Çizgi grafik oluşturalım
+    # Çizgi grafik oluşturuyoruz.
     plt.plot(daily_summary["date"].astype(str), daily_summary["total_revenue"], marker="o")
 
-    # Başlık ve Eksen isimlerini ekliyoruz
+    # Başlık ve eksen isimlerini ekliyoruz.
     plt.title("Günlük Toplam Gelir")
     plt.xlabel("Tarih")
     plt.ylabel("Gelir")
 
-    # Tarih etiketlerini döndürerek okunabilir hale getirmek
+    # Tarih etiketlerini döndürerek okunabilir hale getiriyoruz.
     plt.xticks(rotation=45, ha="right")
 
-    # Görsel taşmaları önlemek
+    # Yerleşimi sıkıştırıp görsel taşmaları önlüyoruz.
     plt.tight_layout()
 
-    # Grafigi PNG olarak kaydediliyor
+    # Grafiği PNG olarak kaydediyoruz.
     plt.savefig(output, dpi=120, bbox_inches="tight")
 
-    # Belleğimizi temizlemek için grafiği kapatıyoruz
+    # Belleği temizlemek için grafiği kapatıyoruz.
     plt.close()
 
     return output
 
 
-
-# 8-) Bu fonksiyonun amacı:
-# Kategorilerine göre toplam gelir grafiğini oluştursun Çubuk grafik ve PNG dosyasını oalrak diske kaydetsin.
+# 8- Bu fonksiyonun amacı:
+# Kategorilere göre toplam gelir grafiğini çubuk grafik olarak üretmek.
 @beartype
-def create_category_revenue_chart(category_summary: pd.DataFrame,output_path: str|Path) -> Path:
-    # Çıktı yolunu PAth nesnesine çevirelim.
-    output= Path(output_path)
+def create_category_revenue_chart(category_summary: pd.DataFrame, output_path: str | Path) -> Path:
+    # Çıktı yolunu Path nesnesine çeviriyoruz.
+    output = Path(output_path)
 
-    # Klasör yoksa otomatik olarak oluştursun
+    # Klasör yoksa oluşturuyoruz.
     output.parent.mkdir(parents=True, exist_ok=True)
 
-    # Grafik boyutunu belirliyoruz
-    plt.figure(figsize=(8,4.5))
+    # Grafik alanını oluşturuyoruz.
+    plt.figure(figsize=(8, 4.5))
 
-    # Çizgi grafik oluşturalım
+    # Çubuk grafik çiziyoruz.
     plt.bar(category_summary["category"], category_summary["total_revenue"])
 
-    # Başlık ve Eksen isimlerini ekliyoruz
-    plt.title("Kategori Göre Toplam Gelir")
+    # Başlık ve eksen isimlerini ekliyoruz.
+    plt.title("Kategoriye Göre Toplam Gelir")
     plt.xlabel("Kategori")
     plt.ylabel("Gelir")
 
-    # X ekseni etiketlerini döndürerek okunabilir hale getirmek
+    # X ekseni etiketlerini döndürerek okunabilirliği artırıyoruz.
     plt.xticks(rotation=20, ha="right")
 
-    # Görsel taşmaları önlemek
+    # Grafik yerleşimini optimize ediyoruz.
     plt.tight_layout()
 
-    # Grafigi PNG olarak kaydediliyor
+    # PNG olarak kaydediyoruz.
     plt.savefig(output, dpi=120, bbox_inches="tight")
 
-    # Belleğimizi temizlemek için grafiği kapatıyoruz
+    # Grafiği kapatıyoruz.
     plt.close()
 
     return output
 
 
-# 9-) Bu fonksiyonun amacı:
-# Pandas DataFrame'i HTML tablo string'e çevirmek
-# Böylece rapor içine doğrudan gömülü bir şekilde dönüştürmek
+# 9- Bu fonksiyonun amacı:
+# Bir pandas DataFrame'i HTML tablo string'ine çevirmek.
+# Böylece rapor içine doğrudan gömülebilir.
 @beartype
-def dataframe_to_html_table(dataframe: pd.DataFrame, max_rows:int = 10) ->str:
-    # Sadece ilk max_rows'a kadar satırı tabloya çeviriyoruz.
-    return dataframe.head(max_rows).to_html(index=False, classes="table",border=0)
+def dataframe_to_html_table(dataframe: pd.DataFrame, max_rows: int = 10) -> str:
+    # Sadece ilk max_rows kadar satırı tabloya çeviriyoruz.
+    return dataframe.head(max_rows).to_html(index=False, classes="table", border=0)
 
 
-# 10-) Bu fonksiyonun amacı:
-# PNG gibi görsel dosyasını base64 string haline çevirmek
-# Böylece HTML içinde ayrı dosya çağırmadan direk olarak gömübilsin
+# 9- Bu fonksiyonun amacı:
+# PNG gibi bir görsel dosyasını base64 string haline çevirmek.
+# Böylece HTML içinde ayrı dosya çağırmadan direkt gömülebilir.
 @beartype
-def image_to_base64(image_path: str|Path) ->str:
+def image_to_base64(image_path: str | Path) -> str:
     # Dosyayı binary modda açıyoruz.
     with open(image_path, "rb") as image_file:
-        # Dosyayı okuyup base64'e çeviriyoruz
-        encoded= base64.b64decode(image_file.read()).decode("utf-8")
+        # Dosyayı okuyup base64'e çeviriyoruz.
+        encoded = base64.b64encode(image_file.read()).decode("utf-8")
 
     return encoded
 
-# 11-) Bu fonksiyonun amacı:
-# Tek sayfalık HTML raporunu üretmek
-# Tablolar, yorumlar, grafik bu alanda göster ve birleştir
+
+# 11- Bu fonksiyonun amacı:
+# Tek sayfalık HTML raporu üretmek.
+# KPI alanları, tablolar, yorumlar ve grafikler burada birleşir.
 @beartype
 def build_html_report(
-        metrics: dict[str,Any],
-        category_summary:pd.DataFrame,
-        daily_summary:pd.DataFrame,
-        preview_data:pd.DataFrame,
-        daily_chart_path: str | Path,
-        category_chart_path: str | Path,
-        output_html_path:str | Path,
-) ->Path:
+    metrics: dict[str, Any],
+    category_summary: pd.DataFrame,
+    daily_summary: pd.DataFrame,
+    preview_data: pd.DataFrame,
+    daily_chart_path: str | Path,
+    category_chart_path: str | Path,
+    output_html_path: str | Path,
+) -> Path:
     # HTML dosyasının yazılacağı yolu Path nesnesine çeviriyoruz.
     output_path = Path(output_html_path)
 
@@ -567,7 +555,7 @@ def build_html_report(
         <div class="section">
             <h2>Ham Veri Önizleme</h2>
             {preview_html}
-            <p class="footer-note">Bu tablo, temizlenmiş veri setinin ilk 15 satırını göstermektedir.</p>
+            <p class="footer-note">Bu tablo, temizlenmiş veri setinin ilk 12 satırını göstermektedir.</p>
         </div>
     </div>
 </body>
