@@ -3,7 +3,6 @@
 # Özellikle Python sürümlerinde tiplerin ileri referanslarını desteklemek için faydalıdır.
 from __future__ import annotations
 
-
 """
 Bu dosya: projenin veri analizi ve rapor üretim mantığını taşır.
 Bizim amacımız: kodu parçalara bölmek ve her bir parçayı SOLID(Single Responsibility) göre yönetmek  ==> Yani Modüler olmasını sağlamak
