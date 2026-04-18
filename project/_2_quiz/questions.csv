@@ -1,0 +1,21 @@
+question,option_a,option_b,option_c,option_d,answer
+Python'da ekrana yazı yazdırmak için hangi fonksiyon kullanılır?,echo(),printf(),print(),write(),C
+Python'da liste veri tipi hangisidir?,"{1,2,3}","(1,2,3)","[1,2,3]","<1,2,3>",C
+Python dosya uzantısı hangisidir?,.java,.py,.html,.js,B
+Aşağıdakilerden hangisi değişken tanımlamak için geçerlidir?,1sayi = 5,sayi-1 = 5,sayi1 = 5,class = 5,C
+Python'da yorum satırı nasıl yazılır?,// yorum,/* yorum */,# yorum,<!-- yorum -->,C
+input() fonksiyonu ne işe yarar?,Ekrana yazı yazdırır,Kullanıcıdan veri alır,Dosya açar,Liste sıralar,B
+"len([1,2,3]) sonucu kaçtır?",2,3,4,1,B
+Aşağıdakilerden hangisi koşul ifadesidir?,for,if,def,import,B
+for döngüsü ne için kullanılır?,Karşılaştırma yapmak için,Tekrar eden işlemler için,Sadece sayı toplamak için,Fonksiyon silmek için,B
+def anahtar kelimesi ne için kullanılır?,Sınıf oluşturmak için,Modül çağırmak için,Fonksiyon tanımlamak için,Dosya kapatmak için,C
+Python'da metin veri tipi hangisidir?,int,str,bool,float,B
+5 + 3 * 2 işleminin sonucu kaçtır?,16,11,13,10,B
+Aşağıdakilerden hangisi doğru karşılaştırmadır?,5 = 5,5 == 5,5 === 5,5 := 5,B
+bool veri tipinde doğru değer hangisidir?,true,TRUE,True,dogru,C
+Python'da bir modülü projeye eklemek için hangisi kullanılır?,using,package,include,import,D
+append() metodu genelde hangi veri tipiyle kullanılır?,list,int,float,tuple,A
+Aşağıdakilerden hangisi sözlük veri tipidir?,"[1,2]","(1,2)",{'ad':'Ali'},<ad:Ali>,C
+int('25') ifadesinin sonucu nedir?,25,'25',Hata verir,25.0,A
+Python büyük-küçük harfe duyarlı mıdır?,Hayır,Evet,Sadece sayılarda,Sadece fonksiyonlarda,B
+Bir Python programını çalıştırmak için terminalde hangisi kullanılabilir?,run quiz.py,python quiz.py,start quiz.py,open quiz.py,B
