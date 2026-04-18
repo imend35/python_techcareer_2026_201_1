@@ -191,7 +191,7 @@ def ask_question(index, total, question_data):
     print(question_data["question"])
     print("-" * 70)
 
-    # options sözlüğündeki tüm şıklarrı sırasıyla ekranda göstersin
+    # options sözlüğündeki tüm şıkları sırasıyla ekranda göstersin
     for key,value in question_data["options"].items():
         print(f"{key}-) {value}")
 
