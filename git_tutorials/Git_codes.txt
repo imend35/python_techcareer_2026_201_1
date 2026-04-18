@@ -70,24 +70,28 @@ $ git log --decorate --oneline --graph --all
 $ git log
 $ git show
 
-21-)
-$
+21-) diff: HEnüz stage edilmemiş değişiklikleri gösterir
+$ git diff
+$ git diff 9a1bc4f5e542ac43521996adb3d4c25ed1fb035d c6e1af0676c323153cc0ae91ec152aa4c290a52d
+$ git diff 9a1bc4f c6e1af0
 
 
-21-)
-$
+21-) --staged:  Stage edilmiş(git add) ama henüz commit edilmemiş
+$ git diff --staged
 
-22-)
-$
+22-) Bir dosyanın satırını kim, hangi commit ile değiştirmiş.
+$ git blame <dosya_adi>
+$ git blame git_tutorials/Git_codes.txt
 
-23-)
-$
+23-) HEAD hareketlerinin geçmişini gösterir. Yanlış reset veya silinen branch kurtarmada çok önemlidir.
+$ git reflog
 
-24-)
-$
+DİKKATTT: Branch öncesi git add, git commit yapınız
+24-) branch: mevcut branchleri listelendisn
+$ git branch
 
 25-)
-$
+$ git branch
 
 26-)
 $
