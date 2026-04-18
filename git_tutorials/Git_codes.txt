@@ -90,59 +90,92 @@ DİKKATTT: Branch öncesi git add, git commit yapınız
 24-) branch: mevcut branchleri listelendisn
 $ git branch
 
-25-)
-$ git branch
+25-)devops: adında branch oluştur
+$ git branch devops
 
-26-)
-$
+26-) switch : yeni nesil hem branch hemde commit gitmek için
+$ git switch devops
 
-27-)
-$
+28-) checkout: Eskiden beri kullanılan yapıdır. Sadece bracnh değiştirmek
+$ git checkout devops
+$ git checkout master
 
-28-)
-$
 
-29-)
-$
+27-) -c : Yeni bir branch oluştur ve yeni oluşturulan branch geç
+$ git switch -c devops
+$ git switch -b devops
 
-30-)
-$
 
-31-)
-$
+29-) -d: Siler(Merge edilmiş brach'ı siler)
+$ git branch -d devops
 
-32-)
-$
+30-) -D: Siler (Merge edilsin veya edilmesin siler: Yani zorla)
+$ git branch -D devops
+
+31-) -m: Aktif Branmch'i adını değiştirmek
+$ git branch -m main
+
+32-) -a: Lokal ve remote branchlerini birlikte listeler
+$ git branch -a
 
 33-)
-$
+$ git add .
+$ git commit -m "message"
+$ git push origin devops
+$ git checkout master
+$ git merge devops         ==> fast-forward    : Belirtilen branchi birleştirir
+$ git merge --no-ff devops ==> no-fast-forward : Merge commit oluşturararak birleştiriyor (Branch geçmişi görünür kalır)
 
 34-)
-$
+$ git add .
+$ git commit -m "message"
+$ git push origin devops
+$ git checkout master
+$ git rebase devops         ==> Geçmişi linear(Düz) bir
 
-35-)
-$
 
-36-)
-$
 
-37-)
-$
+35-) Belirliki bir commit'i başka bir branch sadece ama sadece commiti taşımak istiyorsak
+$ git cherry-pick <commit>
 
-38-)
-$
+36-) remote -v: Uzank depo bağlantılarını göster
+$ git remote -v
 
-39-)
-$
+37-) add: Uzak depo bağlantısını ekler
+$ git remote add origin <URL>
 
-40-)
-$
+38-) remove: Uzak depo bağlantısını siler
+$ git remote remove origin
 
-41- $
-42- $
-43- $
-44- $
-45- $
+39-) set-url : UZak deponunu URL'i değiştirmek
+$ git remote set-url origin  <YENİ_URL>
+
+40-) Uzak depodaki değişiklikleri indirir ama mevcut branch'e UYGULAMAZZZZZ
+$ git fetch
+
+41-) Uzak depodaki değişiklikleri indirir ama mevcut branch'e UYGULARRRRRRR
+$ git pull
+
+42-
+$ git pull origin main
+
+43-
+$ git add .
+$ git commit -m "Branch değiştirmeden önce değişikliği kaydet"
+$ git checkout master
+
+44-
+$ git add .
+$ git stash
+$ git checkout master
+$ git stash pop
+
+
+45-
+$ git restore asd.py git _tutorials/Git_code.txt
+$ git restore .
+$ git checkout master
+
 46- $
 47- $
 48- $
