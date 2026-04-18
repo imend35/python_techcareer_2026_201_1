@@ -124,7 +124,7 @@ def load_questions(csv_file):
             answer = str(row["answer"]).strip().upper()
 
             # Eğer cevap yalnızca A,B,C,D dışında ise satır geçersiz sayılır.
-            if answer not in {"A","B","C","D"}:
+            if answer not in {"A", "B", "C", "D"}:
                 print(f"Uyarı: {row_number}.satırdaki cevap geçersiz olduğu için soru atlandı")
                 continue
 
@@ -155,11 +155,49 @@ def load_questions(csv_file):
             )
 
         # Tüm geçerli sorular yüklendikten sonra geri döndürülür.
-        return  questions
+        return questions
 
 
+# prompt_menu fonskiyonu
+# Kulalnıcıya ana menü gösterilir ve seçim yapılır
+# Geçersiz giriş yapılırsa kullancıya yeniden yönlendişrilir
+def prompt_menu():
+    print("\n" + "=" * 70)
+    print("Python Quiz / Test uygulaması")
+    print("=" * 70)
+    print("1-) Quiz Başlat")
+    print("2-) Quiz Soru sayısı")
+    print("3-) Quiz Çıkış")
+
+    # strip() ==> baştaki, sonradaki boşlukları temizlensin
+    choise = input("Seçiminiz: ").strip()
+
+    # While döngüsü, geçerli bir menü seçimi yapılana kadar tekrar ister
+    while choise not in {"1", "2", "3"}:
+        choise = input("Geçersiz seçim, Lütfen 1,2 veya 3 girin: ").strip()
+    return choise
 
 
+# ask_question fonskiyonu:
+# Tek bir soruyu kullanıcıya gösterir, cevabı alır ve doğru/yanlış kontrolü yapar.
+# Parametreler:
+#   - index: Kaçıncı soru olduğu
+#   - total: Toplam soru sayısı
+#   - question_Data: Soru metni, şıklar doğru cevap içeren sözlük
+def ask_question(index, total, question_data):
+    print("\n" + "=" * 70)
+    print(f"Soru {index}/{total}")
+    print("-" * 70)
+    print(question_data["question"])
+    print("-" * 70)
+
+    # options sözlüğündeki tüm şıklarrı sırasıyla ekranda göstersin
+    for key,value in question_data["options"].items():
+        print(f"{key}-) {value}")
+
+    # Kullanıcıdan cevap alınır
+    # upper( kullanımı) sayesinde küçük harf girilse bile büyük yapar
+    user_answer = input("\nCevabınız (A/B/C/D): ").strip().upper()
 
 #
 #
