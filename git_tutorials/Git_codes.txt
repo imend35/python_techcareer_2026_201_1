@@ -1,0 +1,146 @@
+WT(Work Tree)
+SA(Staging Area) : git add .
+R(Repository)
+-----------------------------------------------------------------------
+
+01-)
+$ git init
+
+02-)
+$ git clone URL
+
+03-)
+$ git config --global user.name "Hamit Mızrak"
+$ git config --global user.name
+
+04-)
+$ git config --global user.email "hamitmizrak@gmail.com"
+$ git config --global user.email
+
+
+05-)
+$ git config list
+
+
+06-)
+$ git add <dosya_adı>
+
+07-)   . Bütün herşey
+$ git add .
+
+08-)   -A: Tüm değişiklikleri ekler ve Silinen dosyalar dahil tamamını kapsar
+$ git add -A
+
+09-) -u:  Sadece takip edilen dosyalardaki değişiklikleri stage eder Yani yeni dosyaları almaz
+$ git add -u
+
+10-) Sadece git takibinde kaldır ancak dosyayı silme
+$ git rm --cached <dosya_adı>  examples: git rem --cached .env
+
+11-) rm: Hem klasörde hemde Git takibinden kaldırır.
+$ git rm <dosya_adı>
+
+
+12-) mv: Heme taşımak hemde isim değiştirmek
+$ git mv <eski> <yeni>
+
+13-)
+$ git commit -m "Login ekranı eklendi, JIRA-123456"
+
+14- am : Takip edilen dosyadaki değişiklikleri stage eder commit eder ancak yeni dosyaları kapsamaz
+$ git commit -am "Bug fix uygulandı"
+
+15-) amend: Son commit düzeltir yani eksik veya commit için güncellemek
+$ git commit --amend
+
+16-)
+$ git commit --amend -m "Son commit mesajını değiştir"
+
+17-)log: commit geçmişini ayrıntılı bir şekilde gösterir
+$ git log
+
+18-) --oneline: Commit geçmisini kısa ve tek satırda görürüz
+$ git log --oneline
+
+19-)DOGA
+$ git log --decorate --oneline --graph --all
+
+20-) show: Son commit'in detayını veya commitin içeriğini gösteriri
+0f169e4fb9829c1565359a8edc8e5e6c7e51e596
+$ git log
+$ git show
+
+21-)
+$
+
+
+21-)
+$
+
+22-)
+$
+
+23-)
+$
+
+24-)
+$
+
+25-)
+$
+
+26-)
+$
+
+27-)
+$
+
+28-)
+$
+
+29-)
+$
+
+30-)
+$
+
+31-)
+$
+
+32-)
+$
+
+33-)
+$
+
+34-)
+$
+
+35-)
+$
+
+36-)
+$
+
+37-)
+$
+
+38-)
+$
+
+39-)
+$
+
+40-)
+$
+
+41- $
+42- $
+43- $
+44- $
+45- $
+46- $
+47- $
+48- $
+49- $
+50- $
