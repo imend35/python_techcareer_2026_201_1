@@ -254,13 +254,13 @@ def run_quiz(questions):
 
     # Soru numaralandırılması 1'den başlatılır.
     for index, question_data in enumerate(randomized_questions, start=1):
-        result= ask_question(index, total, question_data)
+        result = ask_question(index, total, question_data)
         user_results.append(result)
 
         # Eğer sorı doğru ise skor'u 1 artırır.
         if result["is_correct"]:
             ##score=score+1
-            score+=1
+            score += 1
     return score, total, user_results
 
 
@@ -478,13 +478,40 @@ def create_result_base_names():
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     # Path nesnesi olarak temel dosya adını oluşturulsun
-    base_name= RESULT_DIR / f"quiz_result_{timestamp}"
+    base_name = RESULT_DIR / f"quiz_result_{timestamp}"
     return base_name
 
 
 # save_results_txt fonskiyonu:
 # Quiz sonucu okunabilir bir metin raporu oluştursun ".txt" dosyasınıa kaydeder.
 # txt dosyası insan gözüyle daha okuanbilirdir
+def save_results_txt(base_name, score, total, percent, user_results):
+    txt_path = base_name.with_suffix(".txt")
+
+    # Dosya yazma modunda açılır
+    with open(txt_path, "w", encoding="utf-8") as file:
+        file.write("PYTHON QUIZ SONUÇ RAPORU\n")
+        file.write("=" * 70 + "\n")
+        file.write(f"Tarih          : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+        file.write(f"Doğru Sayısı   : {score}\n")
+        file.write(f"Yanlış Sayısı  : {total - score}\n")
+        file.write(f"Toplam Soru    : {total}\n")
+        file.write(f"Başarı Oranı   : %{percent:.2f}\n")
+        file.write("=" * 70 + "\n\n")
+
+        # Her soru tek tek raporu detaylı bir şekilde yazılır.
+        for index, item in enumerate(user_results, start=1):
+            file.write(f"Soru {index}: {item['question']}\n")
+            file.write(f"İşaretlenen Cevap : {item['user_answer']}) {item['options'][item['user_answer']]}\n")
+            file.write(f"Doğru Cevap       : {item['correct_answer']}) {item['options'][item['correct_answer']]}\n")
+            file.write(f"Durum             : {'Doğru' if item['is_correct'] else 'Yanlış'}\n")
+            file.write("-" *70+ "\n")
+
+    return txt_path
+
+
+
+
 
 
 # save_all_results fonksiyonu:
