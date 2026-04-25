@@ -177,7 +177,6 @@ def prompt_menu():
         choise = input("Geçersiz seçim, Lütfen 1,2 veya 3 girin: ").strip()
     return choise
 
-
 # ask_question fonskiyonu:
 # Tek bir soruyu kullanıcıya gösterir, cevabı alır ve doğru/yanlış kontrolü yapar.
 # Parametreler:
@@ -228,7 +227,6 @@ def ask_question(index, total, question_data):
         "is_correct": is_correct,
     }
 
-
 # run_quiz fonksiyonu
 # Quize akışının ana çalıştıma fonskiyonu olacaktır.
 # Tüm sorular rastgele karıştırsın, her bir soruda sırayla kullanıcıya sorsun
@@ -262,6 +260,112 @@ def run_quiz(questions):
             ##score=score+1
             score += 1
     return score, total, user_results
+
+# create_result_base_names fonskiyonu:
+# Sonuç dosyalarına ortak temel isim üretir.
+# ÖRneğin: results/quiz_result_20260425_143945
+# Sopnra buna .txt, .csv, .html uzantıları ekler
+def create_result_base_names():
+    # Önce sonuç klasörünün var olup olmadığını test ediyoruz
+    ensure_results_dir()
+
+    # Zaman damgası tarih-saat
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    # Path nesnesi olarak temel dosya adını oluşturulsun
+    base_name = RESULT_DIR / f"quiz_result_{timestamp}"
+    return base_name
+
+# save_results_txt fonskiyonu:
+# Quiz sonucu okunabilir bir metin raporu oluştursun ".txt" dosyasınıa kaydeder.
+# txt dosyası insan gözüyle daha okuanbilirdir
+def save_results_txt(base_name, score, total, percent, user_results):
+    txt_path = base_name.with_suffix(".txt")
+
+    # Dosya yazma modunda açılır
+    with open(txt_path, "w", encoding="utf-8") as file:
+        file.write("PYTHON QUIZ SONUÇ RAPORU\n")
+        file.write("=" * 70 + "\n")
+        file.write(f"Tarih          : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+        file.write(f"Doğru Sayısı   : {score}\n")
+        file.write(f"Yanlış Sayısı  : {total - score}\n")
+        file.write(f"Toplam Soru    : {total}\n")
+        file.write(f"Başarı Oranı   : %{percent:.2f}\n")
+        file.write("=" * 70 + "\n\n")
+
+        # Her soru tek tek raporu detaylı bir şekilde yazılır.
+        for index, item in enumerate(user_results, start=1):
+            file.write(f"Soru {index}: {item['question']}\n")
+            file.write(f"İşaretlenen Cevap : {item['user_answer']}) {item['options'][item['user_answer']]}\n")
+            file.write(f"Doğru Cevap       : {item['correct_answer']}) {item['options'][item['correct_answer']]}\n")
+            file.write(f"Durum             : {'Doğru' if item['is_correct'] else 'Yanlış'}\n")
+            file.write("-" * 70 + "\n")
+
+    return txt_path
+
+# save_results_txt fonskiyonu:
+# Quiz sonucu okunabilir bir metin raporu oluştursun ".txt" dosyasınıa kaydeder.
+# txt dosyası insan gözüyle daha okuanbilirdir
+def save_results_csv(base_name, score, total, percent, user_results):
+    csv_path = base_name.with_suffix(".csv")
+
+    # Dosya yazma modunda açılır
+    with open(csv_path, "w", encoding="utf-8", newline="") as file:
+        writer = csv.writer(file)
+
+        writer.writerow(["summary_type", "value"])
+        file.write(["date", datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
+        file.write(["score", score])
+        file.write(["wrong", total - score])
+        file.write(["total", total])
+        file.write(["percent", f"{percent:.2f}"])
+        file.write([])
+
+        # Ardından detay verisi başlıklarını yazılır
+        writer.writerow([
+            "question_no",
+            "question",
+            "option_a",
+            "option_b",
+            "option_c",
+            "option_d",
+            "user_answer",
+            "correct_answer",
+            "result",
+        ])
+
+        # Her soru tek tek raporu detaylı bir şekilde yazılır.
+        for index, item in enumerate(user_results, start=1):
+            writer.writerow([
+                index,
+                item["question"],
+                item["question"]["A"],
+                item["question"]["B"],
+                item["question"]["C"],
+                item["question"]["D"],
+                item["question"]["A"],
+                item["user_answer"],
+                item["correct_answer"],
+                "Doğru" if item["is_correct"] else "Yanlış",
+            ])
+
+    return csv_path
+
+
+# get_option_css_class(key, item["user_answer"], item["correct_answer"])
+def get_option_css_class(option_key, user_answer, correct_answer):
+    if option_key == correct_answer and option_key == user_answer:
+        return "option option-correct-selected"
+
+    # Doğru cevap
+    if option_key == correct_answer:
+        return "option option-correct"
+
+    # Hatalı cevap
+    if option_key ==user_answer and user_answer != correct_answer:
+        return "option option-wrong-selected"
+
+    return "option"
 
 
 # save_results_html fonksiyonu:
@@ -457,6 +561,17 @@ def save_results_html(base_name, score, total, percent, user_results):
 
         {''.join(sections)}
     </div>
+    
+    <button 
+    type="button" 
+    id="button_click_me_id"
+    style="background-color:blue; color:fff; cursor:pointer;" > 
+    Click Me </button>
+    
+    <script>
+        let user_data= document.getElementById("button_click_me_id")
+        alert(user_data)
+    </script>
 </body>
 </html>
 """
@@ -464,101 +579,6 @@ def save_results_html(base_name, score, total, percent, user_results):
     # Hazırlanan HTML metni dosyaya UTF-8 ile yazılır.
     html_path.write_text(html_content, encoding="utf-8")
     return html_path
-
-
-# create_result_base_names fonskiyonu:
-# Sonuç dosyalarına ortak temel isim üretir.
-# ÖRneğin: results/quiz_result_20260425_143945
-# Sopnra buna .txt, .csv, .html uzantıları ekler
-def create_result_base_names():
-    # Önce sonuç klasörünün var olup olmadığını test ediyoruz
-    ensure_results_dir()
-
-    # Zaman damgası tarih-saat
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-
-    # Path nesnesi olarak temel dosya adını oluşturulsun
-    base_name = RESULT_DIR / f"quiz_result_{timestamp}"
-    return base_name
-
-
-# save_results_txt fonskiyonu:
-# Quiz sonucu okunabilir bir metin raporu oluştursun ".txt" dosyasınıa kaydeder.
-# txt dosyası insan gözüyle daha okuanbilirdir
-def save_results_txt(base_name, score, total, percent, user_results):
-    txt_path = base_name.with_suffix(".txt")
-
-    # Dosya yazma modunda açılır
-    with open(txt_path, "w", encoding="utf-8") as file:
-        file.write("PYTHON QUIZ SONUÇ RAPORU\n")
-        file.write("=" * 70 + "\n")
-        file.write(f"Tarih          : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-        file.write(f"Doğru Sayısı   : {score}\n")
-        file.write(f"Yanlış Sayısı  : {total - score}\n")
-        file.write(f"Toplam Soru    : {total}\n")
-        file.write(f"Başarı Oranı   : %{percent:.2f}\n")
-        file.write("=" * 70 + "\n\n")
-
-        # Her soru tek tek raporu detaylı bir şekilde yazılır.
-        for index, item in enumerate(user_results, start=1):
-            file.write(f"Soru {index}: {item['question']}\n")
-            file.write(f"İşaretlenen Cevap : {item['user_answer']}) {item['options'][item['user_answer']]}\n")
-            file.write(f"Doğru Cevap       : {item['correct_answer']}) {item['options'][item['correct_answer']]}\n")
-            file.write(f"Durum             : {'Doğru' if item['is_correct'] else 'Yanlış'}\n")
-            file.write("-" *70+ "\n")
-
-    return txt_path
-
-
-# save_results_txt fonskiyonu:
-# Quiz sonucu okunabilir bir metin raporu oluştursun ".txt" dosyasınıa kaydeder.
-# txt dosyası insan gözüyle daha okuanbilirdir
-def save_results_csv(base_name, score, total, percent, user_results):
-    csv_path = base_name.with_suffix(".csv")
-
-    # Dosya yazma modunda açılır
-    with open(csv_path, "w", encoding="utf-8", newline="") as file:
-        writer= csv.writer(file)
-
-        writer.writerow(["summary_type","value"])
-        file.write(["date",datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
-        file.write(["score",score])
-        file.write(["wrong",total - score])
-        file.write(["total",total])
-        file.write(["percent",  f"{percent:.2f}"])
-        file.write([])
-
-
-        # Ardından detay verisi başlıklarını yazılır
-        writer.writerow([
-            "question_no",
-            "question",
-            "option_a",
-            "option_b",
-            "option_c",
-            "option_d",
-            "user_answer",
-            "correct_answer",
-            "result",
-        ])
-
-        # Her soru tek tek raporu detaylı bir şekilde yazılır.
-        for index, item in enumerate(user_results, start=1):
-            writer.writerow([
-                index,
-                item["question"],
-                item["question"]["A"],
-                item["question"]["B"],
-                item["question"]["C"],
-                item["question"]["D"],
-                item["question"]["A"],
-                item["user_answer"],
-                item["correct_answer"],
-                "Doğru" if item["is_correct"] else "Yanlış",
-            ])
-
-    return csv_path
-
 
 
 # save_all_results fonksiyonu:
@@ -579,6 +599,28 @@ def save_all_results(score, total, user_results):
 
     return txt_file, csv_file, html_file, percent
 
+
+# show_final_summary(score, total, percent)
+def show_final_summary(score, total, percent):
+    print("\n"+ "="*70)
+    print("Quiz tamamlandı")
+    print("="*70)
+    print(f"Doğru sayısı: {score}")
+    print(f"Yanlış sayısı: {total-score}")
+    print(f"Toplam sayısı: {total}")
+    print(f"Başarı oranı: {percent:.2f}")
+
+    # Başarı oranına göre seviye değerlendirsin
+    if percent==100:
+        print("Değerlendirme Mükemmel")
+    elif percent>=80:
+        print("Değerlendirme Çok iyi")
+    elif percent>=60:
+        print("Değerlendirme İyi")
+    elif percent>=40:
+        print("Değerlendirme Orta")
+    else:
+        print("Çok kötü çok çalışmalısınız.")
 
 # main fonksiyonu:
 # Programın giriş noktasıdır.
