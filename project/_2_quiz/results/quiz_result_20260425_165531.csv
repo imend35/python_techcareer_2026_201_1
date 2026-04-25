@@ -1,0 +1,28 @@
+summary_type,value
+date,2026-04-25 16:55:31
+score,2
+wrong,18
+total,20
+percent,10.00
+
+question_no,question,option_a,option_b,option_c,option_d,user_answer,correct_answer,result
+1,Aşağıdakilerden hangisi sözlük veri tipidir?,"[1,2]","(1,2)",{'ad':'Ali'},<ad:Ali>,A,C,Yanlış
+2,Python'da yorum satırı nasıl yazılır?,// yorum,/* yorum */,# yorum,<!-- yorum -->,A,C,Yanlış
+3,Python'da metin veri tipi hangisidir?,int,str,bool,float,A,B,Yanlış
+4,Aşağıdakilerden hangisi koşul ifadesidir?,for,if,def,import,A,B,Yanlış
+5,Python'da ekrana yazı yazdırmak için hangi fonksiyon kullanılır?,echo(),printf(),print(),write(),A,C,Yanlış
+6,5 + 3 * 2 işleminin sonucu kaçtır?,16,11,13,10,A,B,Yanlış
+7,append() metodu genelde hangi veri tipiyle kullanılır?,list,int,float,tuple,A,A,Doğru
+8,Python'da bir modülü projeye eklemek için hangisi kullanılır?,using,package,include,import,A,D,Yanlış
+9,Python büyük-küçük harfe duyarlı mıdır?,Hayır,Evet,Sadece sayılarda,Sadece fonksiyonlarda,A,B,Yanlış
+10,"len([1,2,3]) sonucu kaçtır?",2,3,4,1,A,B,Yanlış
+11,Python'da liste veri tipi hangisidir?,"{1,2,3}","(1,2,3)","[1,2,3]","<1,2,3>",A,C,Yanlış
+12,def anahtar kelimesi ne için kullanılır?,Sınıf oluşturmak için,Modül çağırmak için,Fonksiyon tanımlamak için,Dosya kapatmak için,A,C,Yanlış
+13,Aşağıdakilerden hangisi değişken tanımlamak için geçerlidir?,1sayi = 5,sayi-1 = 5,sayi1 = 5,class = 5,A,C,Yanlış
+14,input() fonksiyonu ne işe yarar?,Ekrana yazı yazdırır,Kullanıcıdan veri alır,Dosya açar,Liste sıralar,A,B,Yanlış
+15,Bir Python programını çalıştırmak için terminalde hangisi kullanılabilir?,run quiz.py,python quiz.py,start quiz.py,open quiz.py,A,B,Yanlış
+16,bool veri tipinde doğru değer hangisidir?,true,TRUE,True,dogru,A,C,Yanlış
+17,Aşağıdakilerden hangisi doğru karşılaştırmadır?,5 = 5,5 == 5,5 === 5,5 := 5,A,B,Yanlış
+18,Python dosya uzantısı hangisidir?,.java,.py,.html,.js,A,B,Yanlış
+19,int('25') ifadesinin sonucu nedir?,25,'25',Hata verir,25.0,A,A,Doğru
+20,for döngüsü ne için kullanılır?,Karşılaştırma yapmak için,Tekrar eden işlemler için,Sadece sayı toplamak için,Fonksiyon silmek için,A,B,Yanlış

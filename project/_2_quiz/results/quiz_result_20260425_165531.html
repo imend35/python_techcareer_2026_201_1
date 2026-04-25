@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Sonuç Raporu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #1f2937;
+            margin: 0;
+            padding: 24px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .summary {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        .summary h1 {
+            margin-top: 0;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .summary-box {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 14px;
+        }
+        .question-card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .status {
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .status-correct {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .status-wrong {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+            margin: 16px 0;
+        }
+        .option {
+            background: #f9fafb;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+        .option-correct {
+            background: #dcfce7;
+            border-color: #22c55e;
+        }
+        .option-correct-selected {
+            background: #bbf7d0;
+            border: 2px solid #15803d;
+        }
+        .option-wrong-selected {
+            background: #fee2e2;
+            border-color: #ef4444;
+        }
+        .badge {
+            display: inline-block;
+            margin-left: 8px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .badge-user {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+        .badge-correct {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .answer-summary {
+            background: #f9fafb;
+            border-radius: 10px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="summary">
+            <h1>Quiz Sonuç Raporu</h1>
+            <p><strong>Tarih:</strong> 2026-04-25 16:55:31</p>
+            <div class="summary-grid">
+                <div class="summary-box"><strong>Doğru Sayısı</strong><br>2</div>
+                <div class="summary-box"><strong>Yanlış Sayısı</strong><br>18</div>
+                <div class="summary-box"><strong>Toplam Soru</strong><br>20</div>
+                <div class="summary-box"><strong>Başarı Oranı</strong><br>%10.00</div>
+            </div>
+        </div>
+
+        
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Soru 1</h2>
+                <span class="status status-wrong">Yanlış</span>
+            </div>
+            <p class="question-text">Aşağıdakilerden hangisi sözlük veri tipidir?</p>
+            <ul class="options">
+                <li class="option option-wrong-selected"><strong>A)</strong> [1,2] <span class="badge badge-user">İşaretlediğin</span></li><li class="option"><strong>B)</strong> (1,2)</li><li class="option option-correct"><strong>C)</strong> {&#x27;ad&#x27;:&#x27;Ali&#x27;} <span class="badge badge-correct">Doğru Cevap</span></li><li class="option"><strong>D)</strong> &lt;ad:Ali&gt;</li>
+            </ul>
+            <div class="answer-summary">
+                <p><strong>İşaretlediğin:</strong> A) [1,2]</p>
+                <p><strong>Doğru cevap:</strong> C) {&#x27;ad&#x27;:&#x27;Ali&#x27;}</p>
+            </div>
+        </div>
+        
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Soru 2</h2>
+                <span class="status status-wrong">Yanlış</span>
+            </div>
+            <p class="question-text">Python&#x27;da yorum satırı nasıl yazılır?</p>
+            <ul class="options">
+                <li class="option option-wrong-selected"><strong>A)</strong> // yorum <span class="badge badge-user">İşaretlediğin</span></li><li class="option"><strong>B)</strong> /* yorum */</li><li class="option option-correct"><strong>C)</strong> # yorum <span class="badge badge-correct">Doğru Cevap</span></li><li class="option"><strong>D)</strong> &lt;!-- yorum --&gt;</li>
+            </ul>
+            <div class="answer-summary">
+                <p><strong>İşaretlediğin:</strong> A) // yorum</p>
+                <p><strong>Doğru cevap:</strong> C) # yorum</p>
+            </div>
+        </div>
+        
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Soru 3</h2>
+                <span class="status status-wrong">Yanlış</span>
+            </div>
+            <p class="question-text">Python&#x27;da metin veri tipi hangisidir?</p>
+            <ul class="options">
+                <li class="option option-wrong-selected"><strong>A)</strong> int <span class="badge badge-user">İşaretlediğin</span></li><li class="option option-correct"><strong>B)</strong> str <span class="badge badge-correct">Doğru Cevap</span></li><li class="option"><strong>C)</strong> bool</li><li class="option"><strong>D)</strong> float</li>
+            </ul>
+            <div class="answer-summary">
+                <p><strong>İşaretlediğin:</strong> A) int</p>
+                <p><strong>Doğru cevap:</strong> B) str</p>
+            </div>
+        </div>
+        
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Soru 4</h2>
+                <span class="status status-wrong">Yanlış</span>
+            </div>
+            <p class="question-text">Aşağıdakilerden hangisi koşul ifadesidir?</p>
+            <ul class="options">
+                <li class="option option-wrong-selected"><strong>A)</strong> for <span class="badge badge-user">İşaretlediğin</span></li><li class="option option-correct"><strong>B)</strong> if <span class="badge badge-correct">Doğru Cevap</span></li><li class="option"><strong>C)</strong> def</li><li class="option"><strong>D)</strong> import</li>
+            </ul>
+            <div class="answer-summary">
+                <p><strong>İşaretlediğin:</strong> A) for</p>
+                <p><strong>Doğru cevap:</strong> B) if</p>
+            </div>
+        </div>
+        
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Soru 5</h2>
+                <span class="status status-wrong">Yanlış</span>
+            </div>
+            <p class="question-text">Python&#x27;da ekrana yazı yazdırmak için hangi fonksiyon kullanılır?</p>
+            <ul class="options">
+                <li class="option option-wrong-selected"><strong>A)</strong> echo() <span class="badge badge-user">İşaretlediğin</span></li><li class="option"><strong>B)</strong> printf()</li><li class="option option-correct"><strong>C)</strong> print() <span class="badge badge-correct">Doğru Cevap</span></li><li class="option"><strong>D)</strong> write()</li>
+            </ul>
+            <div class="answer-summary">
+                <p><strong>İşaretlediğin:</strong> A) echo()</p>
+                <p><strong>Doğru cevap:</strong> C) print()</p>
+            </div>
+        </div>
+        
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Soru 6</h2>
+                <span class="status status-wrong">Yanlış</span>
+            </div>
+            <p class="question-text">5 + 3 * 2 işleminin sonucu kaçtır?</p>
+            <ul class="options">
+                <li class="option option-wrong-selected"><strong>A)</strong> 16 <span class="badge badge-user">İşaretlediğin</span></li><li class="option option-correct"><strong>B)</strong> 11 <span class="badge badge-correct">Doğru Cevap</span></li><li class="option"><strong>C)</strong> 13</li><li class="option"><strong>D)</strong> 10</li>
+            </ul>
+            <div class="answer-summary">
+                <p><strong>İşaretlediğin:</strong> A) 16</p>
+                <p><strong>Doğru cevap:</strong> B) 11</p>
+            </div>
+        </div>
+        
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Soru 7</h2>
+                <span class="status status-correct">Doğru</span>
+            </div>
+            <p class="question-text">append() metodu genelde hangi veri tipiyle kullanılır?</p>
+            <ul class="options">
+                <li class="option option-correct-selected"><strong>A)</strong> list <span class="badge badge-user">İşaretlediğin</span> <span class="badge badge-correct">Doğru Cevap</span></li><li class="option"><strong>B)</strong> int</li><li class="option"><strong>C)</strong> float</li><li class="option"><strong>D)</strong> tuple</li>
+            </ul>
+            <div class="answer-summary">
+                <p><strong>İşaretlediğin:</strong> A) list</p>
+                <p><strong>Doğru cevap:</strong> A) list</p>
+            </div>
+        </div>
+        
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Soru 8</h2>
+                <span class="status status-wrong">Yanlış</span>
+            </div>
+            <p class="question-text">Python&#x27;da bir modülü projeye eklemek için hangisi kullanılır?</p>
+            <ul class="options">
+                <li class="option option-wrong-selected"><strong>A)</strong> using <span class="badge badge-user">İşaretlediğin</span></li><li class="option"><strong>B)</strong> package</li><li class="option"><strong>C)</strong> include</li><li class="option option-correct"><strong>D)</strong> import <span class="badge badge-correct">Doğru Cevap</span></li>
+            </ul>
+            <div class="answer-summary">
+                <p><strong>İşaretlediğin:</strong> A) using</p>
+                <p><strong>Doğru cevap:</strong> D) import</p>
+            </div>
+        </div>
+        
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Soru 9</h2>
+                <span class="status status-wrong">Yanlış</span>
+            </div>
+            <p class="question-text">Python büyük-küçük harfe duyarlı mıdır?</p>
+            <ul class="options">
+                <li class="option option-wrong-selected"><strong>A)</strong> Hayır <span class="badge badge-user">İşaretlediğin</span></li><li class="option option-correct"><strong>B)</strong> Evet <span class="badge badge-correct">Doğru Cevap</span></li><li class="option"><strong>C)</strong> Sadece sayılarda</li><li class="option"><strong>D)</strong> Sadece fonksiyonlarda</li>
+            </ul>
+            <div class="answer-summary">
+                <p><strong>İşaretlediğin:</strong> A) Hayır</p>
+                <p><strong>Doğru cevap:</strong> B) Evet</p>
+            </div>
+        </div>
+        
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Soru 10</h2>
+                <span class="status status-wrong">Yanlış</span>
+            </div>
+            <p class="question-text">len([1,2,3]) sonucu kaçtır?</p>
+            <ul class="options">
+                <li class="option option-wrong-selected"><strong>A)</strong> 2 <span class="badge badge-user">İşaretlediğin</span></li><li class="option option-correct"><strong>B)</strong> 3 <span class="badge badge-correct">Doğru Cevap</span></li><li class="option"><strong>C)</strong> 4</li><li class="option"><strong>D)</strong> 1</li>
+            </ul>
+            <div class="answer-summary">
+                <p><strong>İşaretlediğin:</strong> A) 2</p>
+                <p><strong>Doğru cevap:</strong> B) 3</p>
+            </div>
+        </div>
+        
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Soru 11</h2>
+                <span class="status status-wrong">Yanlış</span>
+            </div>
+            <p class="question-text">Python&#x27;da liste veri tipi hangisidir?</p>
+            <ul class="options">
+                <li class="option option-wrong-selected"><strong>A)</strong> {1,2,3} <span class="badge badge-user">İşaretlediğin</span></li><li class="option"><strong>B)</strong> (1,2,3)</li><li class="option option-correct"><strong>C)</strong> [1,2,3] <span class="badge badge-correct">Doğru Cevap</span></li><li class="option"><strong>D)</strong> &lt;1,2,3&gt;</li>
+            </ul>
+            <div class="answer-summary">
+                <p><strong>İşaretlediğin:</strong> A) {1,2,3}</p>
+                <p><strong>Doğru cevap:</strong> C) [1,2,3]</p>
+            </div>
+        </div>
+        
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Soru 12</h2>
+                <span class="status status-wrong">Yanlış</span>
+            </div>
+            <p class="question-text">def anahtar kelimesi ne için kullanılır?</p>
+            <ul class="options">
+                <li class="option option-wrong-selected"><strong>A)</strong> Sınıf oluşturmak için <span class="badge badge-user">İşaretlediğin</span></li><li class="option"><strong>B)</strong> Modül çağırmak için</li><li class="option option-correct"><strong>C)</strong> Fonksiyon tanımlamak için <span class="badge badge-correct">Doğru Cevap</span></li><li class="option"><strong>D)</strong> Dosya kapatmak için</li>
+            </ul>
+            <div class="answer-summary">
+                <p><strong>İşaretlediğin:</strong> A) Sınıf oluşturmak için</p>
+                <p><strong>Doğru cevap:</strong> C) Fonksiyon tanımlamak için</p>
+            </div>
+        </div>
+        
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Soru 13</h2>
+                <span class="status status-wrong">Yanlış</span>
+            </div>
+            <p class="question-text">Aşağıdakilerden hangisi değişken tanımlamak için geçerlidir?</p>
+            <ul class="options">
+                <li class="option option-wrong-selected"><strong>A)</strong> 1sayi = 5 <span class="badge badge-user">İşaretlediğin</span></li><li class="option"><strong>B)</strong> sayi-1 = 5</li><li class="option option-correct"><strong>C)</strong> sayi1 = 5 <span class="badge badge-correct">Doğru Cevap</span></li><li class="option"><strong>D)</strong> class = 5</li>
+            </ul>
+            <div class="answer-summary">
+                <p><strong>İşaretlediğin:</strong> A) 1sayi = 5</p>
+                <p><strong>Doğru cevap:</strong> C) sayi1 = 5</p>
+            </div>
+        </div>
+        
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Soru 14</h2>
+                <span class="status status-wrong">Yanlış</span>
+            </div>
+            <p class="question-text">input() fonksiyonu ne işe yarar?</p>
+            <ul class="options">
+                <li class="option option-wrong-selected"><strong>A)</strong> Ekrana yazı yazdırır <span class="badge badge-user">İşaretlediğin</span></li><li class="option option-correct"><strong>B)</strong> Kullanıcıdan veri alır <span class="badge badge-correct">Doğru Cevap</span></li><li class="option"><strong>C)</strong> Dosya açar</li><li class="option"><strong>D)</strong> Liste sıralar</li>
+            </ul>
+            <div class="answer-summary">
+                <p><strong>İşaretlediğin:</strong> A) Ekrana yazı yazdırır</p>
+                <p><strong>Doğru cevap:</strong> B) Kullanıcıdan veri alır</p>
+            </div>
+        </div>
+        
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Soru 15</h2>
+                <span class="status status-wrong">Yanlış</span>
+            </div>
+            <p class="question-text">Bir Python programını çalıştırmak için terminalde hangisi kullanılabilir?</p>
+            <ul class="options">
+                <li class="option option-wrong-selected"><strong>A)</strong> run quiz.py <span class="badge badge-user">İşaretlediğin</span></li><li class="option option-correct"><strong>B)</strong> python quiz.py <span class="badge badge-correct">Doğru Cevap</span></li><li class="option"><strong>C)</strong> start quiz.py</li><li class="option"><strong>D)</strong> open quiz.py</li>
+            </ul>
+            <div class="answer-summary">
+                <p><strong>İşaretlediğin:</strong> A) run quiz.py</p>
+                <p><strong>Doğru cevap:</strong> B) python quiz.py</p>
+            </div>
+        </div>
+        
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Soru 16</h2>
+                <span class="status status-wrong">Yanlış</span>
+            </div>
+            <p class="question-text">bool veri tipinde doğru değer hangisidir?</p>
+            <ul class="options">
+                <li class="option option-wrong-selected"><strong>A)</strong> true <span class="badge badge-user">İşaretlediğin</span></li><li class="option"><strong>B)</strong> TRUE</li><li class="option option-correct"><strong>C)</strong> True <span class="badge badge-correct">Doğru Cevap</span></li><li class="option"><strong>D)</strong> dogru</li>
+            </ul>
+            <div class="answer-summary">
+                <p><strong>İşaretlediğin:</strong> A) true</p>
+                <p><strong>Doğru cevap:</strong> C) True</p>
+            </div>
+        </div>
+        
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Soru 17</h2>
+                <span class="status status-wrong">Yanlış</span>
+            </div>
+            <p class="question-text">Aşağıdakilerden hangisi doğru karşılaştırmadır?</p>
+            <ul class="options">
+                <li class="option option-wrong-selected"><strong>A)</strong> 5 = 5 <span class="badge badge-user">İşaretlediğin</span></li><li class="option option-correct"><strong>B)</strong> 5 == 5 <span class="badge badge-correct">Doğru Cevap</span></li><li class="option"><strong>C)</strong> 5 === 5</li><li class="option"><strong>D)</strong> 5 := 5</li>
+            </ul>
+            <div class="answer-summary">
+                <p><strong>İşaretlediğin:</strong> A) 5 = 5</p>
+                <p><strong>Doğru cevap:</strong> B) 5 == 5</p>
+            </div>
+        </div>
+        
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Soru 18</h2>
+                <span class="status status-wrong">Yanlış</span>
+            </div>
+            <p class="question-text">Python dosya uzantısı hangisidir?</p>
+            <ul class="options">
+                <li class="option option-wrong-selected"><strong>A)</strong> .java <span class="badge badge-user">İşaretlediğin</span></li><li class="option option-correct"><strong>B)</strong> .py <span class="badge badge-correct">Doğru Cevap</span></li><li class="option"><strong>C)</strong> .html</li><li class="option"><strong>D)</strong> .js</li>
+            </ul>
+            <div class="answer-summary">
+                <p><strong>İşaretlediğin:</strong> A) .java</p>
+                <p><strong>Doğru cevap:</strong> B) .py</p>
+            </div>
+        </div>
+        
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Soru 19</h2>
+                <span class="status status-correct">Doğru</span>
+            </div>
+            <p class="question-text">int(&#x27;25&#x27;) ifadesinin sonucu nedir?</p>
+            <ul class="options">
+                <li class="option option-correct-selected"><strong>A)</strong> 25 <span class="badge badge-user">İşaretlediğin</span> <span class="badge badge-correct">Doğru Cevap</span></li><li class="option"><strong>B)</strong> &#x27;25&#x27;</li><li class="option"><strong>C)</strong> Hata verir</li><li class="option"><strong>D)</strong> 25.0</li>
+            </ul>
+            <div class="answer-summary">
+                <p><strong>İşaretlediğin:</strong> A) 25</p>
+                <p><strong>Doğru cevap:</strong> A) 25</p>
+            </div>
+        </div>
+        
+        <div class="question-card">
+            <div class="question-header">
+                <h2>Soru 20</h2>
+                <span class="status status-wrong">Yanlış</span>
+            </div>
+            <p class="question-text">for döngüsü ne için kullanılır?</p>
+            <ul class="options">
+                <li class="option option-wrong-selected"><strong>A)</strong> Karşılaştırma yapmak için <span class="badge badge-user">İşaretlediğin</span></li><li class="option option-correct"><strong>B)</strong> Tekrar eden işlemler için <span class="badge badge-correct">Doğru Cevap</span></li><li class="option"><strong>C)</strong> Sadece sayı toplamak için</li><li class="option"><strong>D)</strong> Fonksiyon silmek için</li>
+            </ul>
+            <div class="answer-summary">
+                <p><strong>İşaretlediğin:</strong> A) Karşılaştırma yapmak için</p>
+                <p><strong>Doğru cevap:</strong> B) Tekrar eden işlemler için</p>
+            </div>
+        </div>
+        
+    </div>
+    
+    <button 
+    type="button" 
+    id="button_click_me_id"
+    style="background-color:blue; color:fff; cursor:pointer;" > 
+    Click Me </button>
+    
+    <script>
+        let user_data= document.getElementById("button_click_me_id")
+        alert(user_data)
+    </script>
+</body>
+</html>

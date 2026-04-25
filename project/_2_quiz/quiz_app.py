@@ -30,7 +30,7 @@ from datetime import datetime
 # Windows, Linux, macOs gibi işletim sistemlerinde dosya yollarını elle birleştirmek yerine nesne yapsın
 from pathlib import Path
 
-from pandas.conftest import strict_data_files
+# from pandas.conftest import strict_data_files
 
 # BASE_DIR:
 # Python dosyasının bulunduğu klasörünü temsil eder.
@@ -313,13 +313,14 @@ def save_results_csv(base_name, score, total, percent, user_results):
     with open(csv_path, "w", encoding="utf-8", newline="") as file:
         writer = csv.writer(file)
 
+        # Özet Bilgiler
         writer.writerow(["summary_type", "value"])
-        file.write(["date", datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
-        file.write(["score", score])
-        file.write(["wrong", total - score])
-        file.write(["total", total])
-        file.write(["percent", f"{percent:.2f}"])
-        file.write([])
+        writer.writerow(["date", datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
+        writer.writerow(["score", score])
+        writer.writerow(["wrong", total - score])
+        writer.writerow(["total", total])
+        writer.writerow(["percent", f"{percent:.2f}"])
+        writer.writerow([])
 
         # Ardından detay verisi başlıklarını yazılır
         writer.writerow([
@@ -339,11 +340,10 @@ def save_results_csv(base_name, score, total, percent, user_results):
             writer.writerow([
                 index,
                 item["question"],
-                item["question"]["A"],
-                item["question"]["B"],
-                item["question"]["C"],
-                item["question"]["D"],
-                item["question"]["A"],
+                item["options"]["A"],
+                item["options"]["B"],
+                item["options"]["C"],
+                item["options"]["D"],
                 item["user_answer"],
                 item["correct_answer"],
                 "Doğru" if item["is_correct"] else "Yanlış",
