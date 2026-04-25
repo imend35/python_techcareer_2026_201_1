@@ -510,7 +510,54 @@ def save_results_txt(base_name, score, total, percent, user_results):
     return txt_path
 
 
+# save_results_txt fonskiyonu:
+# Quiz sonucu okunabilir bir metin raporu oluştursun ".txt" dosyasınıa kaydeder.
+# txt dosyası insan gözüyle daha okuanbilirdir
+def save_results_csv(base_name, score, total, percent, user_results):
+    csv_path = base_name.with_suffix(".csv")
 
+    # Dosya yazma modunda açılır
+    with open(csv_path, "w", encoding="utf-8", newline="") as file:
+        writer= csv.writer(file)
+
+        writer.writerow(["summary_type","value"])
+        file.write(["date",datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
+        file.write(["score",score])
+        file.write(["wrong",total - score])
+        file.write(["total",total])
+        file.write(["percent",  f"{percent:.2f}"])
+        file.write([])
+
+
+        # Ardından detay verisi başlıklarını yazılır
+        writer.writerow([
+            "question_no",
+            "question",
+            "option_a",
+            "option_b",
+            "option_c",
+            "option_d",
+            "user_answer",
+            "correct_answer",
+            "result",
+        ])
+
+        # Her soru tek tek raporu detaylı bir şekilde yazılır.
+        for index, item in enumerate(user_results, start=1):
+            writer.writerow([
+                index,
+                item["question"],
+                item["question"]["A"],
+                item["question"]["B"],
+                item["question"]["C"],
+                item["question"]["D"],
+                item["question"]["A"],
+                item["user_answer"],
+                item["correct_answer"],
+                "Doğru" if item["is_correct"] else "Yanlış",
+            ])
+
+    return csv_path
 
 
 
